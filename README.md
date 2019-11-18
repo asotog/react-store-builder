@@ -11,6 +11,9 @@ this library relies on react hooks to create scalable stores to share data throu
 - [Scalate with store submodules for large application](#)
 - [Testing utils for store mockups](#)
 
+### Installation
+`npm install react-store-builder`
+
 ### Quickstart
 Create the app store `applicationStore.js`
 
