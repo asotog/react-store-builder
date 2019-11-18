@@ -1,6 +1,10 @@
 # react-store-builder
 this library relies on react hooks to create scalable stores to share data through the application
 
+### Contents
+- [Quickstart](#quickstart)
+- [Using dispatch to update state](#)
+
 ### Quickstart
 Create the app store `applicationStore.js`
 
@@ -10,6 +14,7 @@ import { StoreBuilder } from 'react-store-builder';
 
 xport const initialState = () => ({
   isLoading: false,
+  user: null,
   error: null,
   successMessage: null,
 });
@@ -50,4 +55,27 @@ function App() {
     </ApplicationStoreContext.Provider>
   );
 }
+```
+
+### Using dispatch to update state
+Before using dispatch on any component different thant the app component first need to call the application store hook we created
+
+```
+import { useApplicationStoreContext } from './applicationStore';
+import { mapState } from 'react-store-builder';
+
+const Home = (props) => {
+  const store = useApplicationStoreContext();
+  const { dispatch } = store;
+  const { user } = mapState(store);
+  useEffect(() => {
+    const load = async () => {
+      dispatch({ type: 'SET_LOADING', payload: true });
+      // retrieve user data, await, set user in the state etc
+      dispatch({ type: 'SET_LOADING', payload: false });
+    };
+    if (user) {
+      load();
+    }
+  }, [user, dispatch]);
 ```
