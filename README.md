@@ -3,7 +3,7 @@ this library relies on react hooks to create scalable stores to share data throu
 
 ### Contents
 - [Quickstart](#quickstart)
-- [Using dispatch to update state](#)
+- [Using dispatch to update state](#using-dispatch-to-update-state)
 
 ### Quickstart
 Create the app store `applicationStore.js`
