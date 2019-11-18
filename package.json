@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "react-scripts test --coverage",
+    "eject": "react-scripts eject",
     "lint": "eslint --quiet ./src"
   },
   "repository": {
