@@ -1,4 +1,4 @@
-# React Store Builder
+# React Store Builder [![Build Status](https://travis-ci.org/asotog/react-store-builder.svg?branch=master)](https://travis-ci.org/asotog/react-store-builder)
 this library relies on react hooks to create scalable stores to share data through the application
 
 ### Contents
