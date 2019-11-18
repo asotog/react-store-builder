@@ -1,0 +1,45 @@
+{
+  "name": "react-store-builder",
+  "version": "1.0.0",
+  "description": "this library relies on react hooks to create scalable stores to share data through the application",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "react-scripts test --coverage",
+    "lint": "eslint --quiet ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asotog/react-store-builder.git"
+  },
+  "author": "asotog",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/asotog/react-store-builder/issues"
+  },
+  "homepage": "https://github.com/asotog/react-store-builder#readme",
+  "peerDependencies": {
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "devDependencies": {
+    "react-scripts": "3.2.0",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "firebase-tools": "^7.6.2",
+    "husky": "^3.0.9"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  }
+}
