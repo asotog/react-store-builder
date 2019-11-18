@@ -25,26 +25,25 @@ export const mockStore = (useStoreCallback, onRenderCallback) => {
  * @param {Object} _store Optional not used directly
  */
 export const storeMockBuilder = (_store = {}) => {
-    let store = _store;
-    const setMock = (moduleName, key, object) => {
-      store = moduleName ? {
-        ...store,
-        [moduleName]: {
-          ...store[moduleName],
-          [key]: object,
-        },
-      } : {
-        ...store,
+  let store = _store;
+  const setMock = (moduleName, key, object) => {
+    store = moduleName ? {
+      ...store,
+      [moduleName]: {
+        ...store[moduleName],
         [key]: object,
-      };
-      return storeMockBuilder(store);
+      },
+    } : {
+      ...store,
+      [key]: object,
     };
-    return {
-      mockState: (moduleName, state) => setMock(moduleName, 'state', state),
-      mockGetters: (moduleName, getters) => setMock(moduleName, 'getters', getters),
-      mockActions: (moduleName, actions) => setMock(moduleName, 'actions', actions),
-      mockDispatch: (moduleName, dispatch) => setMock(moduleName, 'dispatch', dispatch),
-      build: () => store,
-    };
+    return storeMockBuilder(store);
   };
-  
+  return {
+    mockState: (moduleName, state) => setMock(moduleName, 'state', state),
+    mockGetters: (moduleName, getters) => setMock(moduleName, 'getters', getters),
+    mockActions: (moduleName, actions) => setMock(moduleName, 'actions', actions),
+    mockDispatch: (moduleName, dispatch) => setMock(moduleName, 'dispatch', dispatch),
+    build: () => store,
+  };
+};

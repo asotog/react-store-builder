@@ -84,6 +84,4 @@ export const mapGetters = (store, namespace) => {
   return store.getters;
 };
 
-export const mockStore = testUtils.mockStore;
-
-export const storeMockBuilder = testUtils.storeMockBuilder;
+export const { mockStore, storeMockBuilder } = testUtils;
