@@ -4,7 +4,7 @@ this library relies on react hooks to create scalable stores to share data throu
 ### Contents
 - [Quickstart](#quickstart)
 - [Using dispatch to update state](#using-dispatch-to-update-state)
-- [Create action methods and use mapActions](#)
+- [Create action methods and use mapActions](#create-action-methods-and-use-mapactions)
 
 #### Pending documentation
 - [mapGetters for state access simplification](#)
@@ -71,7 +71,7 @@ Before using dispatch on any component different thant the app component first n
 
 ```
 import { useApplicationStoreContext } from './applicationStore';
-import { mapState } from 'react-store-builder';
+import { mapState, getDispatch } from 'react-store-builder';
 
 const Home = (props) => {
   const store = useApplicationStoreContext();
