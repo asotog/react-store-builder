@@ -1,6 +1,6 @@
 import { act } from 'react-dom/test-utils';
 import {
-  StoreBuilder, mapActions, mapState, mapGetters,
+  StoreBuilder, mapActions, mapState, mapGetters, getDispatch,
 } from './index';
 import { mockStore } from './testUtils';
 
@@ -118,4 +118,35 @@ it('should be able of creating module with namespaced submodules', async () => {
   expect(store.state.isLoading).toBe(false);
   expect(store.submodulenamespace1.state.isLoading).toBe(false);
   expect(store.submodulenamespace2.state.isLoading).toBe(false);
+});
+
+it('should provide simple way to retrieve dispatch method from store', async () => {
+  let store = null;
+  mockStore(
+    new StoreBuilder(initialState(), reducer).build(),
+    (_store) => { store = _store; },
+  );
+  expect(store.state.isLoading).toBe(false);
+  await act(async () => {
+    const dispatch = getDispatch(store);
+    await dispatch({ type: 'SET_LOADING', payload: true });
+    const { isLoading } = mapState(store);
+    expect(store.state.isLoading).toBe(true);
+    expect(isLoading).toBe(true);
+  });
+});
+
+it('should provide simple way to retrieve dispatch method from store submodules', async () => {
+  let store = null;
+  mockStore(
+    new StoreBuilder(initialState(), reducer, 'submodulenamespace')
+      .build(),
+    (_store) => { store = _store; },
+  );
+  expect(store.submodulenamespace.state.isLoading).toBe(false);
+  await act(async () => {
+    const dispatch = getDispatch(store, 'submodulenamespace');
+    await dispatch({ type: 'SET_LOADING', payload: true });
+    expect(store.submodulenamespace.state.isLoading).toBe(true);
+  });
 });

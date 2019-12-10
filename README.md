@@ -4,9 +4,9 @@ this library relies on react hooks to create scalable stores to share data throu
 ### Contents
 - [Quickstart](#quickstart)
 - [Using dispatch to update state](#using-dispatch-to-update-state)
+- [Create action methods and use mapActions](#)
 
 #### Pending documentation
-- [Create action methods and use mapActions](#)
 - [mapGetters for state access simplification](#)
 - [Scalate with store submodules for large application](#)
 - [Testing utils for store mockups](#)
@@ -21,7 +21,7 @@ Create the app store `applicationStore.js`
 import React, { useContext } from 'react';
 import { StoreBuilder } from 'react-store-builder';
 
-xport const initialState = () => ({
+export const initialState = () => ({
   isLoading: false,
   user: null,
   error: null,
@@ -75,7 +75,7 @@ import { mapState } from 'react-store-builder';
 
 const Home = (props) => {
   const store = useApplicationStoreContext();
-  const { dispatch } = store;
+  const dispatch = getDispatch(store);
   const { user } = mapState(store);
   useEffect(() => {
     const load = async () => {
@@ -87,4 +87,62 @@ const Home = (props) => {
       load();
     }
   }, [user, dispatch]);
+```
+
+### Create action methods and use mapActions
+Actions methods are useful when submitting a form or kind of action where interaction has an interaction, these actions can encapsulate dispatch calls but also api calls so you can wait data to be returned and reflect it into the state
+
+#### Create actions
+Can be created by using `withActions` (as argument is callback function containing the following object `{ dispatch, state, getters, rootStore }`)  during the store setup:
+
+```
+import { todoAPI } from 'app/common/api/todo';
+import { StoreBuilder } from 'react-store-builder';
+
+export const initialState = () => ({
+  list: [],
+});
+
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case 'ADD_TODO': {
+      const { todo } = payload;
+      return { ...state, list: [ ...state.list, todo ] };
+    }
+    default:
+      throw new Error();
+  }
+};
+
+export const useTodosStore = new StoreBuilder(initialState(), reducer)
+  .withActions(({ dispatch, parentStore }) => ({
+    addTodo: async (payload) => {
+      let todo;
+      try {
+        todo = await todoAPI.addTodo(payload);
+        await dispatch({ type: 'ADD_TODO', payload: { todo } });
+      } catch (e) {
+        console.error(e); // or call an error dispatch here
+      }
+      return todo;
+    },
+  }))
+  .build();
+```
+
+#### Using actions
+Similar to `mapState` there is also a `mapActions`:
+
+```
+import { useApplicationStoreContext } from './applicationStore';
+import { mapState } from 'react-store-builder';
+
+const Todos = (props) => {
+  const store = useApplicationStoreContext();
+  const { addTodo } = mapActions(store);
+  const { list } = mapState(store);
+  return (
+    <button onClick={() => addTodo({ title: `New Todo ${list.length}` })}>
+  );
+};
 ```

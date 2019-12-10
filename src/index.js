@@ -35,14 +35,14 @@ export class StoreBuilder {
   }
 
   build() {
-    return (initialState, parentStore) => {
+    return (initialState, rootStore) => {
       const [state, dispatch] = useReducer(this.reducer, initialState || this.state);
       const getters = this.getters(state);
       const store = {
         state,
         dispatch,
         actions: this.actions({
-          dispatch, state, getters, parentStore,
+          dispatch, state, getters, rootStore,
         }),
         getters,
       };
@@ -82,6 +82,13 @@ export const mapGetters = (store, namespace) => {
     return store[namespace].getters;
   }
   return store.getters;
+};
+
+export const getDispatch = (store, namespace) => {
+  if (namespace) {
+    return store[namespace].dispatch;
+  }
+  return store.dispatch;
 };
 
 export const { mockStore, storeMockBuilder } = testUtils;
