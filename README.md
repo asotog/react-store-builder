@@ -115,7 +115,7 @@ const reducer = (state, { type, payload }) => {
 };
 
 export const useTodosStore = new StoreBuilder(initialState(), reducer)
-  .withActions(({ dispatch, parentStore }) => ({
+  .withActions(({ dispatch, rootStore }) => ({
     addTodo: async (payload) => {
       let todo;
       try {
