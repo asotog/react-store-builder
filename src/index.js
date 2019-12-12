@@ -47,9 +47,7 @@ export class StoreBuilder {
         getters,
       };
 
-      const dispatchAction = (actionName, payload) => {
-        store.actions[actionName](payload);
-      };
+      const dispatchAction = (actionName, payload) => store.actions[actionName](payload);
 
       store.dispatchAction = dispatchAction;
 
