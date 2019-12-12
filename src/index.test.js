@@ -13,6 +13,10 @@ const initialState = () => ({
       id: '1',
     },
   },
+  composedActionsTest: {
+    itemType: null,
+    items: [],
+  },
 });
 
 const reducer = (state, { type, payload }) => {
@@ -23,6 +27,8 @@ const reducer = (state, { type, payload }) => {
       return { ...state, error: payload };
     case 'SET_SUCCESS':
       return { ...state, successMessage: payload };
+    case 'SET_ITEMS':
+      return { ...state, composedActionsTest: payload };
     default:
       throw new Error();
   }
@@ -148,5 +154,25 @@ it('should provide simple way to retrieve dispatch method from store submodules'
     const dispatch = getDispatch(store, 'submodulenamespace');
     await dispatch({ type: 'SET_LOADING', payload: true });
     expect(store.submodulenamespace.state.isLoading).toBe(true);
+  });
+});
+
+it('should be able to dispatch an action by calling dispatchAction inside another action', async () => {
+  let store = null;
+  const scenario = { items: ['food1', 'food2'] };
+  mockStore(
+    new StoreBuilder(initialState(), reducer)
+      .withActions(({ dispatch, dispatchAction }) => ({
+        search: () => dispatchAction('getItemsByType', { itemType: 'food' }),
+        getItemsByType: async ({ itemType }) => dispatch({ type: 'SET_ITEMS', payload: { ...scenario, itemType } }),
+      }))
+      .build(),
+    (_store) => { store = _store; },
+  );
+  await act(async () => {
+    const { search } = mapActions(store);
+    await search();
+    const { composedActionsTest } = mapState(store);
+    expect(composedActionsTest).toStrictEqual({ ...scenario, itemType: 'food' });
   });
 });

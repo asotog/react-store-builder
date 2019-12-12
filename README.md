@@ -93,7 +93,7 @@ const Home = (props) => {
 Actions methods are useful when submitting a form or kind of action where interaction has an interaction, these actions can encapsulate dispatch calls but also api calls so you can wait data to be returned and reflect it into the state
 
 #### Create actions
-Can be created by using `withActions` (as argument is callback function containing the following object `{ dispatch, state, getters, rootStore }`)  during the store setup:
+Can be created by using `withActions` (as argument is callback function containing the following object `{ dispatch, state, getters, rootStore, dispatchAction }`)  during the store setup:
 
 ```
 import { todoAPI } from 'app/common/api/todo';
@@ -145,4 +145,17 @@ const Todos = (props) => {
     <button onClick={() => addTodo({ title: `New Todo ${list.length}` })}>
   );
 };
+```
+
+#### Composed actions
+Also is possible to compose multiple actions for complex scenarios where store behaviour is split across multiple actions, so is possible to call an action, and from that action, call another by using `dispatchAction(actionName, payload)` method.
+
+```
+...
+
+.withActions(({ dispatch, dispatchAction }) => ({
+  search: (keywords) => dispatchAction('getItemsByType', { itemType: 'food' }),
+  getItemsByType: async ({ itemType }) => dispatch({ type: 'SET_ITEMS', payload: { items: [ ... ], itemType } }),
+}))
+
 ```

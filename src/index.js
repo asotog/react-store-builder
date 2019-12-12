@@ -38,14 +38,24 @@ export class StoreBuilder {
     return (initialState, rootStore) => {
       const [state, dispatch] = useReducer(this.reducer, initialState || this.state);
       const getters = this.getters(state);
+
       const store = {
         state,
         dispatch,
-        actions: this.actions({
-          dispatch, state, getters, rootStore,
-        }),
+        actions: {},
+        dispatchAction: null,
         getters,
       };
+
+      const dispatchAction = (actionName, payload) => {
+        store.actions[actionName](payload);
+      };
+
+      store.dispatchAction = dispatchAction;
+
+      store.actions = this.actions({
+        dispatch, state, getters, rootStore, dispatchAction,
+      });
 
       const namespacedStore = this.namespace ? {
         [this.namespace]: store,
