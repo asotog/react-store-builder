@@ -4,7 +4,10 @@ this library relies on react hooks to create scalable stores to share data throu
 ### Contents
 - [Quickstart](#quickstart)
 - [Using dispatch to update state](#using-dispatch-to-update-state)
-- [Create action methods and use mapActions](#create-action-methods-and-use-mapactions)
+- [Actions](#actions)
+  - [Create actions]()
+  - [Using actions]()
+  - [Composed actions]()
 
 #### Pending documentation
 - [mapGetters for state access simplification](#)
@@ -89,7 +92,7 @@ const Home = (props) => {
   }, [user, dispatch]);
 ```
 
-### Create action methods and use mapActions
+### Actions
 Actions methods are useful when submitting a form or kind of action where interaction has an interaction, these actions can encapsulate dispatch calls but also api calls so you can wait data to be returned and reflect it into the state
 
 #### Create actions
