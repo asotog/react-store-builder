@@ -5,9 +5,9 @@ this library relies on react hooks to create scalable stores to share data throu
 - [Quickstart](#quickstart)
 - [Using dispatch to update state](#using-dispatch-to-update-state)
 - [Actions](#actions)
-  - [Create actions]()
-  - [Using actions]()
-  - [Composed actions]()
+  - [Create actions](#create-actions)
+  - [Using actions](#using-actions)
+  - [Composed actions](#composed-actions)
 
 #### Pending documentation
 - [mapGetters for state access simplification](#)
