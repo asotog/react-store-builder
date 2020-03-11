@@ -1,6 +1,6 @@
 {
   "name": "react-store-builder",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "this library relies on react hooks to create scalable stores to share data through the application",
   "main": "lib/react-store-builder.js",
   "scripts": {

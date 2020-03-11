@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useReducer, useCallback } from 'react';
 import * as testUtils from './testUtils';
 
 const postBuild = (store) => {
@@ -51,9 +51,13 @@ export class StoreBuilder {
 
       store.dispatchAction = dispatchAction;
 
-      store.actions = this.actions({
+      const originalActions = this.actions({
         dispatch, state, getters, rootStore, dispatchAction,
       });
+      store.actions = Object.keys(originalActions).reduce((prev, curr) => ({
+        ...prev,
+        [curr]: useCallback((...args) => originalActions[curr].apply(null, args), []),
+      }), {});
 
       const namespacedStore = this.namespace ? {
         [this.namespace]: store,
