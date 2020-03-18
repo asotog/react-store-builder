@@ -47,18 +47,13 @@ export class StoreBuilder {
         getters,
       };
 
-      const dispatchAction = (actionName, payload) => store.actions[actionName](payload);
+      const dispatchAction = (actionName, payload) => store.actions()[actionName](payload);
 
       store.dispatchAction = dispatchAction;
 
-      const originalActions = this.actions({
+      store.actions = useCallback(() => this.actions({
         dispatch, state, getters, rootStore, dispatchAction,
-      });
-      store.actions = Object.keys(originalActions).reduce((prev, curr) => ({
-        ...prev,
-        [curr]: useCallback((...args) => originalActions[curr].apply(null, args), []),
-      }), {});
-
+      }));
       const namespacedStore = this.namespace ? {
         [this.namespace]: store,
       } : store;
@@ -77,9 +72,9 @@ export class StoreBuilder {
 
 export const mapActions = (store, namespace) => {
   if (namespace) {
-    return store[namespace].actions;
+    return store[namespace].actions();
   }
-  return store.actions;
+  return store.actions();
 };
 
 export const mapState = (store, namespace) => {

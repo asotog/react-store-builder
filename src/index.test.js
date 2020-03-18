@@ -23,6 +23,8 @@ const reducer = (state, { type, payload }) => {
   switch (type) {
     case 'SET_LOADING':
       return { ...state, isLoading: payload };
+    case 'SET_AUTH':
+      return { ...state, auth: { user: { ...payload } } };
     case 'SET_ERROR':
       return { ...state, error: payload };
     case 'SET_SUCCESS':
@@ -75,7 +77,7 @@ it('should create actions that can modify state', async () => {
     (_store) => { store = _store; },
   );
   await act(async () => {
-    await store.actions.setLoading(true);
+    await store.actions().setLoading(true);
     expect(store.state.isLoading).toBe(true);
   });
 
@@ -175,4 +177,30 @@ it('should be able to dispatch an action by calling dispatchAction inside anothe
     const { composedActionsTest } = mapState(store);
     expect(composedActionsTest).toStrictEqual({ ...scenario, itemType: 'food' });
   });
+});
+
+it('should retrieve updated getter prop value from action after it was updated by dispatch', async () => {
+  let store = null;
+  const fn = jest.fn();
+  mockStore(
+    new StoreBuilder(initialState(), reducer)
+      .withGetters((state) => ({
+        userId: state.auth.user.id,
+      }))
+      .withActions(({ getters }) => ({
+        callableFunction: () => fn(getters.userId),
+      }))
+      .build(),
+    (_store) => { store = _store; },
+  );
+  const { userId: userId1 } = mapGetters(store);
+  expect(userId1).toBe('1');
+  await act(async () => {
+    await store.dispatch({ type: 'SET_AUTH', payload: { id: '2' } });
+  });
+  const { userId: userId2 } = mapGetters(store);
+  const { callableFunction } = mapActions(store);
+  expect(userId2).toBe('2');
+  callableFunction();
+  expect(fn).toHaveBeenCalledWith('2');
 });
