@@ -1,4 +1,4 @@
-import { useReducer, useCallback } from 'react';
+import { useReducer } from 'react';
 import * as testUtils from './testUtils';
 
 const postBuild = (store) => {
@@ -47,13 +47,14 @@ export class StoreBuilder {
         getters,
       };
 
-      const dispatchAction = (actionName, payload) => store.actions()[actionName](payload);
+      const dispatchAction = (actionName, payload) => store.actions[actionName](payload);
 
       store.dispatchAction = dispatchAction;
 
-      store.actions = useCallback(() => this.actions({
+      store.actions = this.actions({
         dispatch, state, getters, rootStore, dispatchAction,
-      }));
+      });
+
       const namespacedStore = this.namespace ? {
         [this.namespace]: store,
       } : store;
@@ -72,9 +73,9 @@ export class StoreBuilder {
 
 export const mapActions = (store, namespace) => {
   if (namespace) {
-    return store[namespace].actions();
+    return store[namespace].actions;
   }
-  return store.actions();
+  return store.actions;
 };
 
 export const mapState = (store, namespace) => {

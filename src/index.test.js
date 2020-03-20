@@ -77,7 +77,7 @@ it('should create actions that can modify state', async () => {
     (_store) => { store = _store; },
   );
   await act(async () => {
-    await store.actions().setLoading(true);
+    await store.actions.setLoading(true);
     expect(store.state.isLoading).toBe(true);
   });
 
