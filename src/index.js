@@ -71,32 +71,39 @@ export class StoreBuilder {
   }
 }
 
-export const mapActions = (store, namespace) => {
+const withStore = (callback) => (store, namespace) => {
+  if (!store) {
+    throw new Error('no store was provided!');
+  }
+  return callback(store, namespace);
+};
+
+export const mapActions = withStore((store, namespace) => {
   if (namespace) {
     return store[namespace].actions;
   }
   return store.actions;
-};
+});
 
-export const mapState = (store, namespace) => {
+export const mapState = withStore((store, namespace) => {
   if (namespace) {
     return store[namespace].state;
   }
   return store.state;
-};
+});
 
-export const mapGetters = (store, namespace) => {
+export const mapGetters = withStore((store, namespace) => {
   if (namespace) {
     return store[namespace].getters;
   }
   return store.getters;
-};
+});
 
-export const getDispatch = (store, namespace) => {
+export const getDispatch = withStore((store, namespace) => {
   if (namespace) {
     return store[namespace].dispatch;
   }
   return store.dispatch;
-};
+});
 
 export const { mockStore, storeMockBuilder } = testUtils;
